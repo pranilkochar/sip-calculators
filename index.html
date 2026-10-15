@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SIP Calculator</title>
+    <title>Pranil's Investment Universe</title>
     <meta
       name="description"
-      content="Mobile-friendly SIP, Step-up SIP, Inflation-adjusted SIP, and SWP calculator."
+      content="Mobile-friendly SIP calculator with investment splitter, mutual fund return estimation and SWP planning."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,8 +21,8 @@
     <div class="app-shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Investment Planner</p>
-          <h1>SIP Calculator Suite</h1>
+          <p class="eyebrow">Personal Finance Planner</p>
+          <h1>Pranil's Investment Universe</h1>
         </div>
       </header>
 
@@ -42,6 +42,14 @@
               <h2>Step-up SIP</h2>
             </div>
             <p>Add annual increases to your SIP contributions.</p>
+          </article>
+
+          <article class="card" data-tab="universe">
+            <div class="card-header">
+              <span class="icon">🧭</span>
+              <h2>Universe</h2>
+            </div>
+            <p>Allocate your monthly investment across funds by percentage.</p>
           </article>
 
           <article class="card" data-tab="inflation">
@@ -167,6 +175,64 @@
           <canvas id="stepupChart" height="110"></canvas>
         </section>
 
+        <section id="universe-panel" class="panel">
+          <div class="panel-header">
+            <h3>Investment Universe</h3>
+            <span class="badge warning">Allocate</span>
+          </div>
+
+          <div class="form-grid">
+            <label>
+              Monthly amount to split
+              <div class="input-wrap">
+                <span>₹</span>
+                <input id="universeMonthlyAmount" type="number" value="50000" min="0" />
+              </div>
+            </label>
+
+            <label>
+              Investment duration
+              <div class="input-wrap">
+                <input id="universeYears" type="number" value="10" min="1" step="1" />
+                <span>Years</span>
+              </div>
+            </label>
+          </div>
+
+          <div class="search-box">
+            <label>
+              Search fund in public API
+              <div class="split-search-row">
+                <input id="fundSearchQuery" type="text" placeholder="Type fund name e.g. Axis Bluechip" />
+                <button id="searchFundBtn" class="secondary-btn">Search</button>
+              </div>
+            </label>
+            <div id="fundSearchResults" class="search-results"></div>
+          </div>
+
+          <div class="panel-section-title">Allocated funds</div>
+          <div id="fundList" class="fund-list"></div>
+
+          <div class="actions-row inline-actions">
+            <button class="secondary-btn" id="normalizeAllocationsBtn">Normalize to 100%</button>
+            <button class="secondary-btn" id="saveUniverseProfileBtn">Save Profile</button>
+            <button class="secondary-btn" id="loadUniverseProfileBtn">Load Profile</button>
+          </div>
+
+          <div class="actions-row">
+            <button class="primary" id="calculateUniverse">Calculate allocation</button>
+          </div>
+
+          <div class="result-box">
+            <div class="result-value" id="universeTotalValue">₹0</div>
+            <div class="result-meta">Combined future value</div>
+          </div>
+
+          <div id="universeStatus" class="status-message"></div>
+          <div class="summary-grid" id="universeSummary"></div>
+          <canvas id="universeChart" height="110"></canvas>
+        </section>
+
         <section id="inflation-panel" class="panel">
           <div class="panel-header">
             <h3>Inflation Adjusted SIP</h3>
@@ -278,197 +344,3 @@
     <script src="assets/js/app.js"></script>
   </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
