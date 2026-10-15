@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIP Calculator</title>
+    <meta
+      name="description"
+      content="Mobile-friendly SIP, Step-up SIP, Inflation-adjusted SIP, and SWP calculator."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Investment Planner</p>
+          <h1>SIP Calculator Suite</h1>
+        </div>
+      </header>
+
+      <main class="container">
+        <section class="cards-grid">
+          <article class="card active" data-tab="sip">
+            <div class="card-header">
+              <span class="icon">💰</span>
+              <h2>SIP</h2>
+            </div>
+            <p>Estimate your wealth from regular monthly investments.</p>
+          </article>
+
+          <article class="card" data-tab="stepup">
+            <div class="card-header">
+              <span class="icon">📈</span>
+              <h2>Step-up SIP</h2>
+            </div>
+            <p>Add annual increases to your SIP contributions.</p>
+          </article>
+
+          <article class="card" data-tab="inflation">
+            <div class="card-header">
+              <span class="icon">🧾</span>
+              <h2>Inflation Adjusted</h2>
+            </div>
+            <p>See real returns after adjusting for inflation.</p>
+          </article>
+
+          <article class="card" data-tab="swp">
+            <div class="card-header">
+              <span class="icon">💸</span>
+              <h2>SWP</h2>
+            </div>
+            <p>Plan regular withdrawals from your investment corpus.</p>
+          </article>
+        </section>
+
+        <section id="sip-panel" class="panel active-panel">
+          <div class="panel-header">
+            <h3>SIP Projection</h3>
+            <span class="badge success">Monthly</span>
+          </div>
+
+          <div class="form-grid">
+            <label>
+              Monthly investment
+              <div class="input-wrap">
+                <span>₹</span>
+                <input id="sipMonthlyInvestment" type="number" value="15000" min="0" />
+              </div>
+            </label>
+
+            <label>
+              Expected annual return
+              <div class="input-wrap">
+                <input id="sipAnnualReturn" type="number" value="12" min="0" step="0.1" />
+                <span>%</span>
+              </div>
+            </label>
+
+            <label>
+              Investment duration
+              <div class="input-wrap">
+                <input id="sipYears" type="number" value="15" min="1" step="1" />
+                <span>Years</span>
+              </div>
+            </label>
+
+            <label>
+              Inflation rate
+              <div class="input-wrap">
+                <input id="sipInflation" type="number" value="6" min="0" step="0.1" />
+                <span>%</span>
+              </div>
+            </label>
+          </div>
+
+          <div class="actions-row">
+            <button class="primary" id="calculateSip">Calculate</button>
+          </div>
+
+          <div class="result-box">
+            <div class="result-value" id="sipFutureValue">₹0</div>
+            <div class="result-meta">Future value</div>
+          </div>
+
+          <div class="summary-grid" id="sipSummary"></div>
+          <canvas id="sipChart" height="110"></canvas>
+        </section>
+
+        <section id="stepup-panel" class="panel">
+          <div class="panel-header">
+            <h3>Step-up SIP</h3>
+            <span class="badge info">Annual increase</span>
+          </div>
+
+          <div class="form-grid">
+            <label>
+              Initial monthly SIP
+              <div class="input-wrap">
+                <span>₹</span>
+                <input id="stepupMonthlyInvestment" type="number" value="15000" min="0" />
+              </div>
+            </label>
+
+            <label>
+              Annual step-up rate
+              <div class="input-wrap">
+                <input id="stepupRate" type="number" value="10" min="0" step="0.1" />
+                <span>%</span>
+              </div>
+            </label>
+
+            <label>
+              Expected annual return
+              <div class="input-wrap">
+                <input id="stepupAnnualReturn" type="number" value="12" min="0" step="0.1" />
+                <span>%</span>
+              </div>
+            </label>
+
+            <label>
+              Investment duration
+              <div class="input-wrap">
+                <input id="stepupYears" type="number" value="15" min="1" step="1" />
+                <span>Years</span>
+              </div>
+            </label>
+          </div>
+
+          <div class="actions-row">
+            <button class="primary" id="calculateStepup">Calculate</button>
+          </div>
+
+          <div class="result-box">
+            <div class="result-value" id="stepupFutureValue">₹0</div>
+            <div class="result-meta">Future value with step-up</div>
+          </div>
+
+          <div class="summary-grid" id="stepupSummary"></div>
+          <canvas id="stepupChart" height="110"></canvas>
+        </section>
+
+        <section id="inflation-panel" class="panel">
+          <div class="panel-header">
+            <h3>Inflation Adjusted SIP</h3>
+            <span class="badge warning">Real return</span>
+          </div>
+
+          <div class="form-grid">
+            <label>
+              Monthly SIP
+              <div class="input-wrap">
+                <span>₹</span>
+                <input id="inflationMonthlyInvestment" type="number" value="15000" min="0" />
+              </div>
+            </label>
+
+            <label>
+              Nominal annual return
+              <div class="input-wrap">
+                <input id="inflationNominalReturn" type="number" value="12" min="0" step="0.1" />
+                <span>%</span>
+              </div>
+            </label>
+
+            <label>
+              Inflation rate
+              <div class="input-wrap">
+                <input id="inflationRate" type="number" value="6" min="0" step="0.1" />
+                <span>%</span>
+              </div>
+            </label>
+
+            <label>
+              Investment duration
+              <div class="input-wrap">
+                <input id="inflationYears" type="number" value="15" min="1" step="1" />
+                <span>Years</span>
+              </div>
+            </label>
+          </div>
+
+          <div class="actions-row">
+            <button class="primary" id="calculateInflation">Calculate</button>
+          </div>
+
+          <div class="result-box">
+            <div class="result-value" id="inflationFutureValue">₹0</div>
+            <div class="result-meta">Inflation-adjusted future value</div>
+          </div>
+
+          <div class="summary-grid" id="inflationSummary"></div>
+          <canvas id="inflationChart" height="110"></canvas>
+        </section>
+
+        <section id="swp-panel" class="panel">
+          <div class="panel-header">
+            <h3>SWP Projection</h3>
+            <span class="badge danger">Withdrawals</span>
+          </div>
+
+          <div class="form-grid">
+            <label>
+              Initial corpus
+              <div class="input-wrap">
+                <span>₹</span>
+                <input id="swpCorpus" type="number" value="3000000" min="0" />
+              </div>
+            </label>
+
+            <label>
+              Monthly withdrawal
+              <div class="input-wrap">
+                <span>₹</span>
+                <input id="swpWithdrawal" type="number" value="25000" min="0" />
+              </div>
+            </label>
+
+            <label>
+              Expected annual return
+              <div class="input-wrap">
+                <input id="swpAnnualReturn" type="number" value="8" min="0" step="0.1" />
+                <span>%</span>
+              </div>
+            </label>
+
+            <label>
+              Inflation rate
+              <div class="input-wrap">
+                <input id="swpInflation" type="number" value="5" min="0" step="0.1" />
+                <span>%</span>
+              </div>
+            </label>
+          </div>
+
+          <div class="actions-row">
+            <button class="primary" id="calculateSwp">Calculate</button>
+          </div>
+
+          <div class="result-box">
+            <div class="result-value" id="swpFinalValue">₹0</div>
+            <div class="result-meta">Corpus left after SWP</div>
+          </div>
+
+          <div class="summary-grid" id="swpSummary"></div>
+          <canvas id="swpChart" height="110"></canvas>
+        </section>
+      </main>
+    </div>
+
+    <script src="assets/js/app.js"></script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

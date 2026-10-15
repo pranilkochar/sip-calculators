@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate HTML files exist
+        run: |
+          test -f index.html
+          test -f assets/css/styles.css
+          test -f assets/js/app.js
+      - name: Simple file sanity check
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files = ['index.html', 'assets/css/styles.css', 'assets/js/app.js', 'README.md']
+          for f in files:
+              p = Path(f)
+              assert p.exists(), f'Missing {f}'
+          print('Files validated successfully.')
+          PY
